@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Launch Cloudformation Stack
+    cloudformation: 
+       stack_name: "Sample-Stack"
+       template: "sample-cfn.yml"
+       disable_rollback: true
+       state: "present"
+       region: "us-east-1"
+       
