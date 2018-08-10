@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage ('checkout'){
             steps {
-                git branch: '$BRANCH_NAME', changelog: false, credentialsId: '9440d5c3-c608-4ef7-9686-1b9b9d650495', poll: false, url: 'https://github.com/krapa999/cloudformation.git' 
+                git branch: '$BRANCH_NAME', changelog: false, credentialsId: '9440d5c3-c608-4ef7-9686-1b9b9d650495', poll: false, url: 'https://github.com/vraaj88/cfn-template.git' 
             }    
         }
     
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh 'sudo yum install python-pip -y'
                 sh 'sudo yum install awscli -y'
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'jvinayak', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'rvemula', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
                 {
                 sh '''aws --version
                     aws configure set default.region us-east-1
@@ -44,6 +44,7 @@ pipeline {
                     }
                     steps {
                         echo "Create Stack "
+                        sh 'aws cloudformation create-stack --stack-name myteststack --template-body file://sampletemplate.json --parameters ParameterKey=KeyPairName,ParameterValue=TestKey ParameterKey=SubnetIDs,ParameterValue=SubnetID1\\,SubnetID2'
                     }
         }
         stage ('Update Stack') {
@@ -53,6 +54,7 @@ pipeline {
                     }
                     steps {
                         echo "Update"
+                        sh ''
                     }
         }
         stage ('Rollback Stack') {
